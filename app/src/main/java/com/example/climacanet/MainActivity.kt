@@ -25,14 +25,21 @@ class MainActivity : AppCompatActivity() {
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         // dayNightMode = AppCompatDelegate.getDefaultNightMode()
         // setCloudy()
-
         val city = intent.getStringExtra(TAG)
-        Toast.makeText(this, city, Toast.LENGTH_LONG).show()
+        if (city != null) {
+            cityData(city)
+        }
 
+
+
+
+
+    }
+
+    private fun cityData(city:String) {
         val canetCity = City("Canet de Mar", 9, "Soleado")
         val canetPlaya = City("Playa de Canet", 12, "Soleado")
         val bcnCity = City("Barcelona", 45, "El Infierno")
-
         when(city) {
             Constants.CANET_VALUE -> {
                 binding.tvCity.text = canetCity.name
@@ -51,7 +58,6 @@ class MainActivity : AppCompatActivity() {
             }
             else -> Toast.makeText(this,"No se encontro la ciudad", Toast.LENGTH_SHORT).show()
         }
-
     }
 
     private fun setLiveBackground() {

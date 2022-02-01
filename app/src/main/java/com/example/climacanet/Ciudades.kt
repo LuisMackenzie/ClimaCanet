@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.climacanet.databinding.ActivityCiudadesBinding
+import com.example.climacanet.utils.Network
 
 class Ciudades : AppCompatActivity() {
 
@@ -17,6 +18,12 @@ class Ciudades : AppCompatActivity() {
         setContentView(binding.root)
 
         setUpElements()
+
+        if (Network.haveNet(this)) {
+            Toast.makeText(applicationContext, "HAY Intenet", Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(applicationContext, "NO HAY Intenet!!!!!!", Toast.LENGTH_LONG).show()
+        }
 
     }
 
