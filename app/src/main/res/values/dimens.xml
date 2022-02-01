@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="status_size">20sp</dimen>
+    <dimen name="default_welcome_size">26sp</dimen>
+    <dimen name="degrees_size">96sp</dimen>
+    <dimen name="city_size">24sp</dimen>
+    <dimen name="padding_default">16dp</dimen>
+    <dimen name="margin_button_default">50dp</dimen>
+</resources>

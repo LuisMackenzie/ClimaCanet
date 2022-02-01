@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Clima Canet</string>
+    <string name="default_degrees">0º</string>
+    <string name="default_status">Nublado</string>
+    <string name="default_city">Ciudad de Barcelona</string>
+    <string name="background_desc">paisaje</string>
+    <string name="tv_welcome">Bienvenido a Clima Canet</string>
+    <string name="clima_de_canet">Clima de Canet</string>
+    <string name="clima_en_la_playa_de_canet">Clima en la playa de canet</string>
+    <string name="clima_de_barcelona">Clima de Barcelona</string>
+</resources>
