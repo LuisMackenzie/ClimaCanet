@@ -7,11 +7,12 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.bumptech.glide.Glide
 import com.example.climacanet.Constants.TAG
 import com.example.climacanet.databinding.ActivityMainBinding
+import com.example.climacanet.inter.CompletedListener
 import com.example.climacanet.models.City
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
     private lateinit var binding: ActivityMainBinding
 

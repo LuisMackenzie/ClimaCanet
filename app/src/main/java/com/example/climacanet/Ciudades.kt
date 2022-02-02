@@ -1,6 +1,7 @@
 package com.example.climacanet
 
 import android.content.Intent
+import android.os.AsyncTask.execute
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.StrictMode
@@ -8,6 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.climacanet.databinding.ActivityCiudadesBinding
+import com.example.climacanet.inter.CompletedListener
+import com.example.climacanet.utils.DescargaURL
 import com.example.climacanet.utils.Network
 import java.io.IOException
 import java.io.InputStream
@@ -15,7 +18,7 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.jvm.Throws
 
-class Ciudades : AppCompatActivity() {
+class Ciudades:AppCompatActivity(), CompletedListener {
 
     private lateinit var binding:ActivityCiudadesBinding
 
@@ -29,34 +32,12 @@ class Ciudades : AppCompatActivity() {
         if (Network.haveNet(this)) {
             Toast.makeText(applicationContext, "HAY Intenet", Toast.LENGTH_LONG).show()
             // descargarDatos("http://www.google.es")
+            // DescargaURL(this).execute("http://www.google.es")
             // Log.d("INFO_DESCARGADA", "Se han descargado lo datos necesarios")
         } else {
-            Toast.makeText(applicationContext, "NO HAY Intenet!!!!!!", Toast.LENGTH_LONG).show()
+            Toast.makeText(applicationContext, "NO HAY RED!!!!!!", Toast.LENGTH_LONG).show()
         }
 
-    }
-
-    @Throws(IOException::class)
-    private fun descargarDatos(url:String):String {
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
-        StrictMode.setThreadPolicy(policy)
-
-        var input:InputStream?=null
-        try {
-            val newUrl = URL(url)
-            val conn = newUrl.openConnection() as HttpURLConnection
-            conn.requestMethod = "GET"
-            conn.connect()
-            input = conn.inputStream
-            return input.bufferedReader().use {
-                it.readText()
-            }
-
-        } finally {
-            if (input != null) {
-                input.close()
-            }
-        }
     }
 
     private fun setUpElements() {
@@ -90,5 +71,9 @@ class Ciudades : AppCompatActivity() {
             Toast.makeText(applicationContext, "Se Pulso el Boton de Barcelona", Toast.LENGTH_LONG).show()
 
         }
+    }
+
+    override fun downComplete(result: String) {
+        TODO("Not yet implemented")
     }
 }
