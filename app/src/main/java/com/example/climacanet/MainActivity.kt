@@ -1,14 +1,20 @@
 package com.example.climacanet
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.example.climacanet.Constants.TAG
 import com.example.climacanet.databinding.ActivityMainBinding
-import com.example.climacanet.inter.CompletedListener
 import com.example.climacanet.models.City
+import com.example.climacanet.models.CityOld
+import com.example.climacanet.utils.API
+import com.google.gson.Gson
 import kotlin.properties.Delegates
 
 
@@ -22,13 +28,14 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setLiveBackground()
+        // setLiveBackground()
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         // dayNightMode = AppCompatDelegate.getDefaultNightMode()
         // setCloudy()
         val city = intent.getStringExtra(TAG)
         if (city != null) {
-            cityData(city)
+            // cityData(city)
+            volleyRequest(API.TEST_URL)
         }
 
 
@@ -37,28 +44,52 @@ class MainActivity : AppCompatActivity(){
 
     }
 
+    // Metodo para volley
+    private fun volleyRequest(url: String) {
+        val queue = Volley.newRequestQueue(this)
+        val request = StringRequest(Request.Method.GET, url, { response ->
+            try {
+                Log.d("VolleyRequest", response)
+                val gson = Gson()
+                val city = gson.fromJson(response, City::class.java)
+                with(binding) {
+                    tvCity.text = city.name
+                    tvDegrees.text = city.main.temp.toString()
+                    tvStatus.text = city.weather.get(0).description
+                }
+            } catch (e:Exception) {
+
+            }
+        }, {  })
+
+        queue.add(request)
+    }
+
     private fun cityData(city:String) {
-        val canetCity = City("Canet de Mar", 9, "Soleado")
-        val canetPlaya = City("Playa de Canet", 12, "Soleado")
-        val bcnCity = City("Barcelona", 45, "El Infierno")
-        when(city) {
-            Constants.CANET_VALUE -> {
-                binding.tvCity.text = canetCity.name
-                binding.tvDegrees.text = "${canetCity.degrees}º"
-                binding.tvStatus.text = canetCity.status
+        val canetCity = CityOld("Canet de Mar", 9, "Soleado")
+        val canetPlaya = CityOld("Playa de Canet", 12, "Soleado")
+        val bcnCity = CityOld("Barcelona", 45, "El Infierno")
+        with(binding) {
+            when(city) {
+                Constants.CANET_VALUE -> {
+                    tvCity.text = canetCity.name
+                    tvDegrees.text = "${canetCity.degrees}º"
+                    tvStatus.text = canetCity.status
+                }
+                Constants.PLAYA_VALUE -> {
+                    tvCity.text = canetPlaya.name
+                    tvDegrees.text = "${canetPlaya.degrees}º"
+                    tvStatus.text = canetPlaya.status
+                }
+                Constants.BCN_VALUE -> {
+                    tvCity.text = bcnCity.name
+                    tvDegrees.text = "${bcnCity.degrees}º"
+                    tvStatus.text = bcnCity.status
+                }
+                else -> Toast.makeText(this@MainActivity,"No se encontro la ciudad", Toast.LENGTH_SHORT).show()
             }
-            Constants.PLAYA_VALUE -> {
-                binding.tvCity.text = canetPlaya.name
-                binding.tvDegrees.text = "${canetPlaya.degrees}º"
-                binding.tvStatus.text = canetPlaya.status
-            }
-            Constants.BCN_VALUE -> {
-                binding.tvCity.text = bcnCity.name
-                binding.tvDegrees.text = "${bcnCity.degrees}º"
-                binding.tvStatus.text = bcnCity.status
-            }
-            else -> Toast.makeText(this,"No se encontro la ciudad", Toast.LENGTH_SHORT).show()
         }
+
     }
 
     private fun setLiveBackground() {

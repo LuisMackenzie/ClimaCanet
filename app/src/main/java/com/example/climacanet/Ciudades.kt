@@ -8,10 +8,16 @@ import android.os.StrictMode
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.climacanet.databinding.ActivityCiudadesBinding
 import com.example.climacanet.inter.CompletedListener
+import com.example.climacanet.models.City
+import com.example.climacanet.utils.API
 import com.example.climacanet.utils.DescargaURL
 import com.example.climacanet.utils.Network
+import com.google.gson.Gson
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection
@@ -31,9 +37,7 @@ class Ciudades:AppCompatActivity(), CompletedListener {
 
         if (Network.haveNet(this)) {
             Toast.makeText(applicationContext, "HAY Intenet", Toast.LENGTH_LONG).show()
-            // descargarDatos("http://www.google.es")
-            // DescargaURL(this).execute("http://www.google.es")
-            // Log.d("INFO_DESCARGADA", "Se han descargado lo datos necesarios")
+            // volleyRequest(API.TEST_URL)
         } else {
             Toast.makeText(applicationContext, "NO HAY RED!!!!!!", Toast.LENGTH_LONG).show()
         }
@@ -71,6 +75,23 @@ class Ciudades:AppCompatActivity(), CompletedListener {
             Toast.makeText(applicationContext, "Se Pulso el Boton de Barcelona", Toast.LENGTH_LONG).show()
 
         }
+    }
+
+    // Metodo para volley
+    private fun volleyRequest(url: String) {
+        val queue = Volley.newRequestQueue(this)
+        val request = StringRequest(Request.Method.GET, url, { response ->
+            try {
+                Log.d("VolleyRequest", response)
+                val gson = Gson()
+                val city = gson.fromJson(response, City::class.java)
+                Log.d("WEATHER", city.name)
+            } catch (e:Exception) {
+
+            }
+        }, {  })
+
+        queue.add(request)
     }
 
     override fun downComplete(result: String) {
