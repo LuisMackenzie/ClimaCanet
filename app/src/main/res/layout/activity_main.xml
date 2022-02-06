@@ -11,8 +11,9 @@
         android:id="@+id/iv_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/purple_200"
         android:contentDescription="@string/background_desc"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        tools:srcCompat="@drawable/ic_launcher_foreground" />
 
     <!--<androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_background"
@@ -58,5 +59,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

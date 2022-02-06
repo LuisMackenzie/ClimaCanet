@@ -14,6 +14,7 @@ import com.example.climacanet.databinding.ActivityMainBinding
 import com.example.climacanet.models.City
 import com.example.climacanet.models.CityOld
 import com.example.climacanet.utils.API
+import com.example.climacanet.utils.Network
 import com.google.gson.Gson
 import kotlin.properties.Delegates
 
@@ -28,19 +29,34 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        // setLiveBackground()
         // AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        // dayNightMode = AppCompatDelegate.getDefaultNightMode()
-        // setCloudy()
+        dayNightMode = AppCompatDelegate.getDefaultNightMode()
+
         val city = intent.getStringExtra(TAG)
-        if (city != null) {
-            // cityData(city)
-            volleyRequest(API.TEST_URL)
+
+
+        if (Network.haveNet(this)) {
+            if (city != null) createUrl(city)
+        } else {
+            Toast.makeText(applicationContext, "NO HAY RED!!!!!!", Toast.LENGTH_LONG).show()
         }
 
 
 
 
+
+
+    }
+
+    private fun createUrl(city: String) {
+        volleyRequest(API.BASE_URL+API.BASE_ID+
+                city+
+                API.BASE_SEPARATOR+
+                API.BASE_API_KEY+
+                API.BASE_SEPARATOR+
+                API.BASE_UNITS+
+                API.BASE_SEPARATOR+
+                API.BASE_LANG)
 
     }
 
@@ -52,11 +68,13 @@ class MainActivity : AppCompatActivity(){
                 Log.d("VolleyRequest", response)
                 val gson = Gson()
                 val city = gson.fromJson(response, City::class.java)
-                with(binding) {
+                showCityData(city)
+                /*with(binding) {
                     tvCity.text = city.name
-                    tvDegrees.text = city.main.temp.toString()
+                    tvDegrees.text = "${city.main.temp}º"
                     tvStatus.text = city.weather.get(0).description
-                }
+                }*/
+                // setLiveBackground(city.weather.get(0).description)
             } catch (e:Exception) {
 
             }
@@ -65,41 +83,33 @@ class MainActivity : AppCompatActivity(){
         queue.add(request)
     }
 
-    private fun cityData(city:String) {
-        val canetCity = CityOld("Canet de Mar", 9, "Soleado")
-        val canetPlaya = CityOld("Playa de Canet", 12, "Soleado")
-        val bcnCity = CityOld("Barcelona", 45, "El Infierno")
+    private fun showCityData(city:City) {
+        // val timeKey = city.weather.get(0).description
+        // setLiveBackground(timeKey)
         with(binding) {
-            when(city) {
-                Constants.CANET_VALUE -> {
-                    tvCity.text = canetCity.name
-                    tvDegrees.text = "${canetCity.degrees}º"
-                    tvStatus.text = canetCity.status
-                }
-                Constants.PLAYA_VALUE -> {
-                    tvCity.text = canetPlaya.name
-                    tvDegrees.text = "${canetPlaya.degrees}º"
-                    tvStatus.text = canetPlaya.status
-                }
-                Constants.BCN_VALUE -> {
-                    tvCity.text = bcnCity.name
-                    tvDegrees.text = "${bcnCity.degrees}º"
-                    tvStatus.text = bcnCity.status
-                }
-                else -> Toast.makeText(this@MainActivity,"No se encontro la ciudad", Toast.LENGTH_SHORT).show()
-            }
+            tvCity.text = city.name
+            tvDegrees.text = "${city.main.temp}º"
+            tvStatus.text = city.weather.get(0).description
+            setLiveBackground(tvStatus.text.toString())
         }
+
 
     }
 
-    private fun setLiveBackground() {
-        val urlGif = "https://4.bp.blogspot.com/-0ak6SgeNvIY/VBjrWzf8HrI/AAAAAAACHZI/EVFRXN6mdQI/s1600/0618gif%2Bpaisaje.gif"
+    private fun setLiveBackground(key:String) {
+
+        when(key) {
+            "nubes dispersas" -> setSunny()
+            "muy nuboso" -> setCloudy()
+            else -> setRainy()
+        }
+        /*val urlGif = "https://4.bp.blogspot.com/-0ak6SgeNvIY/VBjrWzf8HrI/AAAAAAACHZI/EVFRXN6mdQI/s1600/0618gif%2Bpaisaje.gif"
         // val uri: Uri = Uri.parse(urlGif)
         Glide.with(applicationContext)
             .asGif()
             .load(urlGif)
             .centerCrop()
-            .into(binding.ivBackground)
+            .into(binding.ivBackground)*/
     }
 
     private fun setSunny() {

@@ -36,7 +36,7 @@ class Ciudades:AppCompatActivity(), CompletedListener {
         setUpElements()
 
         if (Network.haveNet(this)) {
-            Toast.makeText(applicationContext, "HAY Intenet", Toast.LENGTH_LONG).show()
+            // Toast.makeText(applicationContext, "HAY Intenet", Toast.LENGTH_LONG).show()
             // volleyRequest(API.TEST_URL)
         } else {
             Toast.makeText(applicationContext, "NO HAY RED!!!!!!", Toast.LENGTH_LONG).show()
@@ -45,16 +45,11 @@ class Ciudades:AppCompatActivity(), CompletedListener {
     }
 
     private fun setUpElements() {
-        /*binding.btnCanet.setOnClickListener {
-
-            Toast.makeText(applicationContext, "Se Pulso el Boton de Canet", Toast.LENGTH_LONG).show()
-
-        }*/
 
         binding.btnCanet.setOnClickListener(View.OnClickListener {
-            Toast.makeText(applicationContext, "Se Pulso el Boton de Canet", Toast.LENGTH_LONG).show()
+            // Toast.makeText(applicationContext, "Se Pulso el Boton de Canet", Toast.LENGTH_LONG).show()
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra(Constants.TAG, Constants.CANET_VALUE)
+            intent.putExtra(Constants.TAG, API.BASE_ID_CANET2)
             startActivity(intent)
         })
 
@@ -62,36 +57,19 @@ class Ciudades:AppCompatActivity(), CompletedListener {
         binding.btnPlaya.setOnClickListener {
 
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra(Constants.TAG, Constants.PLAYA_VALUE)
+            intent.putExtra(Constants.TAG, API.BASE_ID_CANET)
             startActivity(intent)
-            Toast.makeText(applicationContext, "Se Pulso el Boton de Playa", Toast.LENGTH_LONG).show()
+            // Toast.makeText(applicationContext, "Se Pulso el Boton de Playa", Toast.LENGTH_LONG).show()
 
         }
         binding.btnBcn.setOnClickListener {
 
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra(Constants.TAG, Constants.BCN_VALUE)
+            intent.putExtra(Constants.TAG, API.BASE_ID_BCN)
             startActivity(intent)
-            Toast.makeText(applicationContext, "Se Pulso el Boton de Barcelona", Toast.LENGTH_LONG).show()
+            // Toast.makeText(applicationContext, "Se Pulso el Boton de Barcelona", Toast.LENGTH_LONG).show()
 
         }
-    }
-
-    // Metodo para volley
-    private fun volleyRequest(url: String) {
-        val queue = Volley.newRequestQueue(this)
-        val request = StringRequest(Request.Method.GET, url, { response ->
-            try {
-                Log.d("VolleyRequest", response)
-                val gson = Gson()
-                val city = gson.fromJson(response, City::class.java)
-                Log.d("WEATHER", city.name)
-            } catch (e:Exception) {
-
-            }
-        }, {  })
-
-        queue.add(request)
     }
 
     override fun downComplete(result: String) {
